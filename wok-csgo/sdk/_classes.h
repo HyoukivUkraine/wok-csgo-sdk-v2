@@ -86,10 +86,6 @@ public:
 		"client.dll", "55 8B EC 83 E4 F0 B8 ? ? ? ? E8 ? ? ? ? A1", void(__thiscall*)(void*, vec3_t*, vec4_t*, int, float, float, float, c_ik_context*), pos, q, sequence, cycle, weight, time, ik)
 };
 
-class c_bone_merge_cache {
-
-};
-
 class c_base_entity : public i_client_entity {
 public:
 	template <typename T>
@@ -125,21 +121,20 @@ public:
 	OFFSET(get_networkable(), i_client_networkable*, 0x8)
 
 	OFFSET(get_studio_hdr(), c_studio_hdr*, 0x2950)
-	POFFSET(get_bone_cache(), bone_cache_t, 0x290C + 0x4)
+	POFFSET(get_bone_cache(), bone_cache_t, 0x2914)
 	OFFSET(get_occlusion_mask(), bit_flag_t<uint32_t>, 0xA24)
 	OFFSET(get_occlusion_frame_count(), int, 0xA30)
 	OFFSET(get_unknown_occlusion_flags(), bit_flag_t<uint32_t>, 0xA2C)
 	OFFSET(get_occlusion_flags(), bit_flag_t<uint32_t>, 0xA28)
-	OFFSET(get_bone_array_for_write(), matrix3x4_t*, 0x26A8)
-	OFFSET(get_last_setup_bones_frame_count(), int, 0xA64 + 0x4)
-	OFFSET(get_predictable(), int, 0x2EA + 0x4)
-	OFFSET(get_accumulated_bone_mask(), bit_flag_t<uint32_t>, 0x269C + 0x4)
-	OFFSET(get_prev_bone_mask(), bit_flag_t<uint32_t>, 0x2698 + 0x4)
-	OFFSET(get_most_recent_model_bone_counter(), unsigned long, 0x268C + 0x4)
-	OFFSET(get_last_setup_bones_time(), float, 0x2920 + 0x4)
-	OFFSET(get_ik_context(), c_ik_context*, 0x266C + 0x4)
-	OFFSET(get_setup_bones_pos(), vec3_t, 0xA68 + 0x4)
-	OFFSET(get_setup_bones_quaternion(), vec4_t, 0x166C + 0x4)
+	OFFSET(get_last_setup_bones_frame_count(), int, 0xA68)
+	OFFSET(get_predictable(), int, 0x2EE)
+	OFFSET(get_accumulated_bone_mask(), bit_flag_t<uint32_t>, 0x26A0)
+	OFFSET(get_prev_bone_mask(), bit_flag_t<uint32_t>, 0x269C)
+	OFFSET(get_most_recent_model_bone_counter(), unsigned long, 0x2690)
+	OFFSET(get_last_setup_bones_time(), float, 0x2928)
+	OFFSET(get_ik_context(), c_ik_context*, 0x2670)
+	OFFSET(get_setup_bones_pos(), vec3_t, 0xA6C)
+	OFFSET(get_setup_bones_quaternion(), vec4_t, 0x1670)
 	OFFSET(get_take_damage(), int, 0x280)
 
 	DATA_MAP(get_effects(), bit_flag_t<uint32_t>, "m_fEffects")
@@ -273,14 +268,9 @@ public:
 	NETVAR(get_view_model(), c_base_handle, "CBasePlayer->m_hViewModel[0]")
 	NETVAR_OFFSET(get_cur_cmd(), c_user_cmd*, "CBasePlayer->m_hConstraintEntity", -0xC)
 		
-	OFFSET(get_last_cmd(), c_user_cmd, 0x3288)
+	OFFSET(get_last_cmd(), c_user_cmd, 0x3298)
 
-	VFUNC(think(), 138, void(__thiscall*)(void*))
-	VFUNC(pre_think(), 317, void(__thiscall*)(void*))
-	VFUNC(post_think(), 318, void(__thiscall*)(void*))
-	VFUNC(select_item(const char* name, int sub_type), 329, void(__thiscall*)(void*, const char*, int), name, sub_type)
-	VFUNC(update_collistion_bounds(), 339, void(__thiscall*)(void*))
-	VFUNC(set_local_view_angles(const qangle_t& angle), 372, void(__thiscall*)(void*, const qangle_t&), angle)
+	VFUNC(set_local_view_angles(const qangle_t& angle), 373, void(__thiscall*)(void*, const qangle_t&), angle)
 
 	VFUNC_SIG(unknown_think(int unk), "client.dll", "55 8B EC 56 57 8B F9 8B B7 ? ? ? ? 8B C6 C1 E8 16 24 01 74 18", void(__thiscall*)(void*, int), unk)
 	VFUNC_SIG(using_standard_weapons_in_vehicle(), "client.dll", "56 57 8B F9 8B 97 ? ? ? ? 83 FA FF 74 41", bool(__thiscall*)(void*))
@@ -311,13 +301,10 @@ public:
 	NETVAR(get_client_side_animation(), bool, "CBaseAnimating->m_bClientSideAnimation")
 	NETVAR(get_sequence(), int, "CBaseAnimating->m_nSequence")
 		
-	VFUNC(set_sequence(int sequence), 218, void(__thiscall*)(void*, int), sequence)
-	VFUNC(studio_frame_advance(), 219, void(__thiscall*)(void*))
 	VFUNC(get_layer_sequence_cycle_rate(anim_layer_t* layer, int sequence), 223, float(__thiscall*)(void*, anim_layer_t*, int), layer, sequence)
 
 	POFFSET(get_bone_accessor(), bone_accessor_t, 0x26A4)
-	OFFSET(get_bone_merge_cache(), c_bone_merge_cache*, 0x290C)
-
+		
 	__forceinline int select_weighted_sequence_from_modifiers(int activity, void* modifiers, int size) {
 		const auto hdr = get_studio_hdr();
 		if (!hdr)
@@ -349,11 +336,11 @@ public:
 	NETVAR_OFFSET(get_flash_alpha(), float, "CCSPlayer->m_flFlashMaxAlpha", -0x8)
 	NETVAR_OFFSET(get_anim_state(), c_anim_state*, "CCSPlayer->m_bIsScoped", -0x14)
 
-	VFUNC(standard_blending_rules(c_studio_hdr* hdr, vec3_t* vec, vec4_t* q, float time, int mask), 205, void(__thiscall*)(void*, c_studio_hdr*, vec3_t*, vec4_t*, float, int), hdr, vec, q, time, mask)
-	VFUNC(build_transformations(c_studio_hdr* hdr, vec3_t* vec, vec4_t* q, matrix3x4_t& transform, int mask, uint8_t* computed), 189, void(__thiscall*)(void*, c_studio_hdr*, vec3_t*, vec4_t*, matrix3x4_t const&, int, uint8_t*), hdr, vec, q, transform, mask, computed)
-	VFUNC(update_ik_locks(float time), 191, void(__thiscall*)(void*, float), time)
-	VFUNC(calculate_ik_locks(float time), 192, void(__thiscall*)(void*, float), time)
-	VFUNC(update_client_side_animation(), 223, void(__thiscall*)(void*))
+	VFUNC(standard_blending_rules(c_studio_hdr* hdr, vec3_t* vec, vec4_t* q, float time, int mask), 206, void(__thiscall*)(void*, c_studio_hdr*, vec3_t*, vec4_t*, float, int), hdr, vec, q, time, mask)
+	VFUNC(build_transformations(c_studio_hdr* hdr, vec3_t* vec, vec4_t* q, matrix3x4_t& transform, int mask, uint8_t* computed), 190, void(__thiscall*)(void*, c_studio_hdr*, vec3_t*, vec4_t*, matrix3x4_t const&, int, uint8_t*), hdr, vec, q, transform, mask, computed)
+	VFUNC(update_ik_locks(float time), 192, void(__thiscall*)(void*, float), time)
+	VFUNC(calculate_ik_locks(float time), 193, void(__thiscall*)(void*, float), time)
+	VFUNC(update_client_side_animation(), 224, void(__thiscall*)(void*))
 
 	VFUNC_SIG(invalidate_physics_recursive(int flags), "client.dll", "55 8B EC 83 E4 F8 83 EC 0C 53 8B 5D 08 8B C3 56", void(__thiscall*)(void*, int), flags)
 
@@ -368,9 +355,9 @@ public:
 
 class c_base_combat_weapon : public c_base_attributable_item {
 public:
-	VFUNC(get_inaccuracy(), 482, float(__thiscall*)(void*))
-	VFUNC(get_spread(), 452, float(__thiscall*)(void*))
-	VFUNC(update_accuracy(), 483, void(__thiscall*)(void*))
+	VFUNC(get_inaccuracy(), 483, float(__thiscall*)(void*))
+	VFUNC(get_spread(), 453, float(__thiscall*)(void*))
+	VFUNC(update_accuracy(), 484, void(__thiscall*)(void*))
 
 	NETVAR(get_pin_pulled(), bool, "CBaseCSGrenade->m_bPinPulled")
 	NETVAR(get_throw_time(), float, "CBaseCSGrenade->m_fThrowTime")
