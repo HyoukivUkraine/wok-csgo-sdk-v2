@@ -315,7 +315,7 @@ public:
 	VFUNC(studio_frame_advance(), 219, void(__thiscall*)(void*))
 	VFUNC(get_layer_sequence_cycle_rate(anim_layer_t* layer, int sequence), 223, float(__thiscall*)(void*, anim_layer_t*, int), layer, sequence)
 
-	POFFSET(get_bone_accessor(), bone_accessor_t, 0x26A8)
+	POFFSET(get_bone_accessor(), bone_accessor_t, 0x26A4)
 	OFFSET(get_bone_merge_cache(), c_bone_merge_cache*, 0x290C)
 
 	__forceinline int select_weighted_sequence_from_modifiers(int activity, void* modifiers, int size) {
