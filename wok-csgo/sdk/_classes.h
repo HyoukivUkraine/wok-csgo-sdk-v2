@@ -124,7 +124,7 @@ public:
 	OFFSET(get_renderable(), i_client_renderable*, 0x4)
 	OFFSET(get_networkable(), i_client_networkable*, 0x8)
 
-	OFFSET(get_studio_hdr(), c_studio_hdr*, 0x294C)
+	OFFSET(get_studio_hdr(), c_studio_hdr*, 0x2950)
 	POFFSET(get_bone_cache(), bone_cache_t, 0x290C + 0x4)
 	OFFSET(get_occlusion_mask(), bit_flag_t<uint32_t>, 0xA24)
 	OFFSET(get_occlusion_frame_count(), int, 0xA30)
@@ -252,7 +252,7 @@ public:
 
 	DATA_MAP(get_collision_state(), int, "m_vphysicsCollisionState")
 
-	OFFSET(get_spawn_time(), float, 0xA370)
+	OFFSET(get_spawn_time(), float, 0x103C0)
 
 	NETVAR(get_fall_velocity(), float, "CBasePlayer->m_flFallVelocity")
 	NETVAR(get_observer_mode(), e_observer_mode, "CBasePlayer->m_iObserverMode")
@@ -305,7 +305,7 @@ public:
 
 class c_base_animating : public c_base_player {
 public:
-	PPOFFSET(get_anim_layers(), anim_layers_t, 0x2980)
+	PPOFFSET(get_anim_layers(), anim_layers_t, 0x2990)
 	NETVAR(get_pose_params(), pose_params_t, "CBaseAnimating->m_flPoseParameter")
 	NETPROP(get_client_side_animation_prop(), "CBaseAnimating->m_bClientSideAnimation")
 	NETVAR(get_client_side_animation(), bool, "CBaseAnimating->m_bClientSideAnimation")
@@ -313,9 +313,9 @@ public:
 		
 	VFUNC(set_sequence(int sequence), 218, void(__thiscall*)(void*, int), sequence)
 	VFUNC(studio_frame_advance(), 219, void(__thiscall*)(void*))
-	VFUNC(get_layer_sequence_cycle_rate(anim_layer_t* layer, int sequence), 222, float(__thiscall*)(void*, anim_layer_t*, int), layer, sequence)
+	VFUNC(get_layer_sequence_cycle_rate(anim_layer_t* layer, int sequence), 223, float(__thiscall*)(void*, anim_layer_t*, int), layer, sequence)
 
-	POFFSET(get_bone_accessor(), bone_accessor_t, 0x26A4)
+	POFFSET(get_bone_accessor(), bone_accessor_t, 0x26A8)
 	OFFSET(get_bone_merge_cache(), c_bone_merge_cache*, 0x290C)
 
 	__forceinline int select_weighted_sequence_from_modifiers(int activity, void* modifiers, int size) {
