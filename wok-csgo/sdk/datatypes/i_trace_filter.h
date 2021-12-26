@@ -86,30 +86,38 @@ public:
 };
 
 struct ray_t {
-	ray_t() = default;
-	ray_t(const vec3_t& start, const vec3_t& end) {
+	ray_t ( ) : m_world_axis_transform ( NULL ) { };
+	ray_t ( const vec3_t& start, const vec3_t& end ) { init ( start, end ); }
+	ray_t ( const vec3_t& start, const vec3_t& end, const vec3_t& mins, const vec3_t& maxs ) { init ( start, end, mins, maxs ); }
+
+	__forceinline void init ( const vec3_t& start, const vec3_t& end )
+	{
 		m_start = start;
 		m_delta = end - start;
-		m_start_offset = vec4a_t(0.f, 0.f, 0.f);
-		m_extents = vec4a_t(0.f, 0.f, 0.f);
+		m_start_offset = vec4a_t ( 0.f, 0.f, 0.f );
+		m_extents = vec4a_t ( 0.f, 0.f, 0.f );
 
 		m_world_axis_transform = nullptr;
 
 		m_is_ray = true;
-		m_is_swept = m_delta.length_sqr();
+		m_is_swept = m_delta.length_sqr ( ) != 0.f;
 	}
 
-	ray_t(const vec3_t& start, const vec3_t& end, const vec3_t& mins, const vec3_t& maxs) {
+	__forceinline void init ( const vec3_t& start, const vec3_t& end, const vec3_t& mins, const vec3_t& maxs )
+	{
 		m_delta = end - start;
 
 		m_world_axis_transform = nullptr;
-		m_is_swept = m_delta.length_sqr();
+		m_is_swept = m_delta.length ( ) != 0.f;
 
-		m_extents = (maxs - mins) * 0.5f;
-		m_is_ray = m_extents.length_sqr() < 1e-6;
+		m_extents = maxs - mins;
+		m_extents *= 0.5f;
+		m_is_ray = m_extents.length_sqr ( ) < 1e-6;
 
-		m_start_offset = (maxs + mins) * 0.5f;
-		m_start = (start + m_start_offset) * -1.f;
+		m_start_offset = maxs + mins;
+		m_start_offset *= 0.5f;
+		m_start = start + m_start_offset;
+		m_start_offset *= -1.0f;
 	}
 
 	vec4a_t				m_start;
