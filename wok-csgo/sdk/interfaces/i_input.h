@@ -39,7 +39,7 @@ public:
 	bool					m_track_ir_available;
 	bool					m_mouse_initialized;
 	bool					m_mouse_active;
-	char					pad1[158];
+	char					pad1[178];
 	bool					m_camera_in_third_person;
 	char					pad2[2];
 	vec3_t					m_camera_offset;
