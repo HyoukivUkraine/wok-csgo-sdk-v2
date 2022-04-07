@@ -136,12 +136,15 @@ namespace csgo {
         const code_section_t client{ modules.at( HASH( "client.dll" ) ) };
 
         interfaces_t interfaces{};
-
-        parse_interfaces( modules.at( HASH( "client.dll" ) ), interfaces );
-        parse_interfaces( modules.at( HASH( "engine.dll" ) ), interfaces );
-        parse_interfaces( modules.at( HASH( "vstdlib.dll" ) ), interfaces );
-        parse_interfaces( modules.at( HASH( "vphysics.dll" ) ), interfaces );
-        parse_interfaces( modules.at( HASH( "matchmaking.dll" ) ), interfaces );
+        
+          std::array < unsigned int, 5 > modules_arr = { 
+            HASH ( "client.dll" ), HASH ( "engine.dll" ), 
+            HASH ( "vstdlib.dll" ), HASH ( "vphysics.dll" ), 
+            HASH ( "matchmaking.dll" ) };
+        
+        for ( size_t i = 0lu; i < modules_arr.size ( ); ++i ) {
+            parse_interfaces ( modules.at ( modules_arr.at ( i ) ), interfaces );
+        }
 
         if ( interfaces.empty( ) )
             THROW_IF_DBG( "can't find interfaces." );
